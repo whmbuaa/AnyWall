@@ -19,12 +19,17 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
+import com.tencent.map.geolocation.TencentLocation;
+import com.tencent.map.geolocation.TencentLocationListener;
+import com.tencent.map.geolocation.TencentLocationManager;
+import com.tencent.map.geolocation.TencentLocationRequest;
 import com.tencent.mapsdk.raster.model.BitmapDescriptorFactory;
 import com.tencent.mapsdk.raster.model.GeoPoint;
 import com.tencent.mapsdk.raster.model.LatLng;
 import com.tencent.mapsdk.raster.model.Marker;
 import com.tencent.mapsdk.raster.model.MarkerOptions;
 import com.tencent.tencentmap.mapsdk.map.MapView;
+import com.tencent.tencentmap.mapsdk.map.OnMarkerPressListener;
 
 public class MainActivityWhm extends FragmentActivity {
 	
@@ -44,9 +49,54 @@ public class MainActivityWhm extends FragmentActivity {
 	//internal state
 	private LatLng  mCurrentLocaiotn;
 	private LatLng  mLastLocation = new LatLng(39.907937 , 116.398647);
+	private Marker  mCurrentLocationMarker;
 	
 	private final Map<String, Marker> mapMarkers = new HashMap<String, Marker>();
 	
+	
+	// tentent location sdk
+	private TencentLocationListener mLocationListener = new TencentLocationListener(){
+
+		@Override
+		public void onLocationChanged(TencentLocation location	, int error,
+				String reason) {
+			// TODO Auto-generated method stub
+			if(TencentLocation.ERROR_OK == error){
+				mLastLocation = mCurrentLocaiotn ;
+				mCurrentLocaiotn = new LatLng(location.getLatitude(),location.getLongitude());
+				
+				if(mCurrentLocationMarker == null){
+					
+					mCurrentLocationMarker = mMapView.addMarker(new MarkerOptions()
+					.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_location))
+					.position(mCurrentLocaiotn));
+				}
+				else {
+					mCurrentLocationMarker.setPosition(mCurrentLocaiotn);
+				}
+				
+				GeoPoint currentGeoPoint = new GeoPoint((int)(mCurrentLocaiotn.getLatitude()*1E6),(int)(mCurrentLocaiotn.getLongitude()*1E6));
+//				mMapView.getController().animateTo(new GeoPoint((int)(mCurrentLocaiotn.getLatitude()*1E6),(int)(mCurrentLocaiotn.getLatitude()*1E6)));
+//			/	mMapView.getController().setCenter(currentGeoPoint);
+				mMapView.getController().animateTo(currentGeoPoint);
+		
+			}
+			else {
+				
+				Toast.makeText(MainActivityWhm.this, "location error:"+reason, Toast.LENGTH_LONG);
+				if(mCurrentLocationMarker != null){
+					mCurrentLocationMarker.remove();
+				}
+			}
+		}
+
+		@Override
+		public void onStatusUpdate(String arg0, int arg1, String arg2) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	};
 	
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -56,6 +106,8 @@ public class MainActivityWhm extends FragmentActivity {
 		setContentView(R.layout.activity_main_whm);
 		mMapView = (MapView)findViewById(R.id.mapview);
 		mMapView.onCreate(arg0);
+		initMapView(mMapView);
+		
 		
 		mBtnPost = (Button)findViewById(R.id.post_button);
 		mBtnPost.setOnClickListener(new OnClickListener() {
@@ -93,7 +145,22 @@ public class MainActivityWhm extends FragmentActivity {
 	}
 	
 	
+	private void initMapView(MapView mapView){
+		mapView.getController().setZoom(13);
+		
+		mapView.getController().setOnMarkerClickListener(new OnMarkerPressListener() {
+			
+			@Override
+			public void onMarkerPressed(Marker marker) {
+				// TODO Auto-generated method stub
+				marker.showInfoWindow();
+			}
+		});
+		
+		
+	}
 	
+
 	 /*
 	   * Set up the query to update the map view
 	   */
@@ -212,6 +279,13 @@ public class MainActivityWhm extends FragmentActivity {
 		mMapView.onResume();
 		super.onResume();
 		
+		//register location request
+		TencentLocationRequest request = TencentLocationRequest.create();
+		
+		if(TencentLocationManager.getInstance(this).requestLocationUpdates(request, mLocationListener) != 0){
+			Toast.makeText(this, "request location updates failed", Toast.LENGTH_LONG).show();
+		}
+		
 		doMapQuery();
 	}
 	@Override
@@ -219,6 +293,8 @@ public class MainActivityWhm extends FragmentActivity {
 		// TODO Auto-generated method stub
 		mMapView.onPause();
 		super.onPause();
+		
+		TencentLocationManager.getInstance(this).removeUpdates(mLocationListener);
 	}
 	
 	@Override
