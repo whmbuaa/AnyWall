@@ -15,10 +15,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseQuery;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVGeoPoint;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.FindCallback;
 import com.tencent.map.geolocation.TencentLocation;
 import com.tencent.map.geolocation.TencentLocationListener;
 import com.tencent.map.geolocation.TencentLocationManager;
@@ -173,9 +173,9 @@ public class MainActivityWhm extends FragmentActivity {
 	      cleanUpMarkers(new HashSet<String>());
 	      return;
 	    }
-	    final ParseGeoPoint myPoint = new ParseGeoPoint(myLoc.getLatitude(),myLoc.getLongitude());
+	    final AVGeoPoint myPoint = new AVGeoPoint(myLoc.getLatitude(),myLoc.getLongitude());
 	    // Create the map Parse query
-	    ParseQuery<AnywallPost> mapQuery = AnywallPost.getQuery();
+	    AVQuery<AnywallPost> mapQuery = AnywallPost.getQuery();
 	    // Set up additional query filters
 	    mapQuery.whereWithinKilometers("location", myPoint, MAX_POST_SEARCH_DISTANCE);
 	    mapQuery.include("user");
@@ -184,7 +184,7 @@ public class MainActivityWhm extends FragmentActivity {
 	    // Kick off the query in the background
 	    mapQuery.findInBackground(new FindCallback<AnywallPost>() {
 	      @Override
-	      public void done(List<AnywallPost> objects, ParseException e) {
+	      public void done(List<AnywallPost> objects, AVException e) {
 	        if (e != null) {
 	          if (Application.APPDEBUG) {
 	            Log.d(Application.APPTAG, "An error occurred while querying for map posts.", e);

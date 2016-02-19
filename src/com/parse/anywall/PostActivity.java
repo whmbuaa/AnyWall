@@ -3,7 +3,6 @@ package com.parse.anywall;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,11 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.parse.ParseACL;
-import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
+import com.avos.avoscloud.AVACL;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVGeoPoint;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.SaveCallback;
 
 /**
  * Activity which displays a login screen to the user, offering registration as well.
@@ -29,7 +28,7 @@ public class PostActivity extends Activity {
   private Button postButton;
 
   private int maxCharacterCount = Application.getConfigHelper().getPostMaxCharacterCount();
-  private ParseGeoPoint geoPoint;
+  private AVGeoPoint geoPoint;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +38,7 @@ public class PostActivity extends Activity {
 
     Intent intent = getIntent();
     Bundle bundle = intent.getParcelableExtra(Application.INTENT_EXTRA_LOCATION);
-    geoPoint = new ParseGeoPoint(bundle.getDouble("latitude"), bundle.getDouble("longitude"));
+    geoPoint = new AVGeoPoint(bundle.getDouble("latitude"), bundle.getDouble("longitude"));
 
     postEditText = (EditText) findViewById(R.id.post_edittext);
     postEditText.addTextChangedListener(new TextWatcher() {
@@ -85,8 +84,8 @@ public class PostActivity extends Activity {
     // Set the location to the current user's location
     post.setLocation(geoPoint);
     post.setText(text);
-    post.setUser(ParseUser.getCurrentUser());
-    ParseACL acl = new ParseACL();
+    post.setUser(AVUser.getCurrentUser());
+    AVACL acl = new AVACL();
 
     // Give public read access
     acl.setPublicReadAccess(true);
@@ -95,7 +94,7 @@ public class PostActivity extends Activity {
     // Save the post
     post.saveInBackground(new SaveCallback() {
       @Override
-      public void done(ParseException e) {
+      public void done(AVException e) {
         dialog.dismiss();
         finish();
       }

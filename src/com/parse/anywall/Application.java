@@ -3,8 +3,8 @@ package com.parse.anywall;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.parse.Parse;
-import com.parse.ParseObject;
+import com.avos.avoscloud.AVOSCloud;
+import com.avos.avoscloud.AVObject;
 
 public class Application extends android.app.Application {
   // Debugging switch
@@ -32,9 +32,9 @@ public class Application extends android.app.Application {
   public void onCreate() {
     super.onCreate();
 
-    ParseObject.registerSubclass(AnywallPost.class);
-    Parse.initialize(this, "JIGH78m3xIz2fC6NkVwbpzutpndEvB3embDvdErB",
-        "qXJIf4T7fwUdA79z2n18fBrNR7gC9LF9i7fi9O61");
+    AVObject.registerSubclass(AnywallPost.class);
+    AVOSCloud.initialize(this, "1BMQIW8J0wF2axmHOFWKkYWm-gzGzoHsz",
+        "ODx7XQHffMPGLPsbaH6Y0H7e");
 
     preferences = getSharedPreferences("com.parse.anywall", Context.MODE_PRIVATE);
 

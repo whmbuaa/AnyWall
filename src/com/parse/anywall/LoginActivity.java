@@ -12,9 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.LogInCallback;
-import com.parse.ParseException;
-import com.parse.ParseUser;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.LogInCallback;
 
 /**
  * Activity which displays a login screen to the user, offering registration as well.
@@ -86,9 +86,9 @@ public class LoginActivity extends Activity {
     dialog.setMessage(getString(R.string.progress_login));
     dialog.show();
     // Call the Parse login method
-    ParseUser.logInInBackground(username, password, new LogInCallback() {
+    AVUser.logInInBackground(username, password, new LogInCallback() {
       @Override
-      public void done(ParseUser user, ParseException e) {
+      public void done(AVUser user, AVException e) {
         dialog.dismiss();
         if (e != null) {
           // Show the error message

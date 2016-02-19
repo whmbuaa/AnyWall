@@ -1,16 +1,16 @@
 package com.parse.anywall;
 
-import com.parse.ParseClassName;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
+import com.avos.avoscloud.AVClassName;
+import com.avos.avoscloud.AVGeoPoint;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.AVUser;
 
 /**
  * Data model for a post.
  */
-@ParseClassName("Posts")
-public class AnywallPost extends ParseObject {
+@AVClassName("Posts")
+public class AnywallPost extends AVObject {
   public String getText() {
     return getString("text");
   }
@@ -19,23 +19,23 @@ public class AnywallPost extends ParseObject {
     put("text", value);
   }
 
-  public ParseUser getUser() {
-    return getParseUser("user");
+  public AVUser getUser() {
+    return getAVUser("user");
   }
 
-  public void setUser(ParseUser value) {
+  public void setUser(AVUser value) {
     put("user", value);
   }
 
-  public ParseGeoPoint getLocation() {
-    return getParseGeoPoint("location");
+  public AVGeoPoint getLocation() {
+    return getAVGeoPoint("location");
   }
 
-  public void setLocation(ParseGeoPoint value) {
+  public void setLocation(AVGeoPoint value) {
     put("location", value);
   }
 
-  public static ParseQuery<AnywallPost> getQuery() {
-    return ParseQuery.getQuery(AnywallPost.class);
+  public static AVQuery<AnywallPost> getQuery() {
+    return AVQuery.getQuery(AnywallPost.class);
   }
 }

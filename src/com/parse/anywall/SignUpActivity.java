@@ -12,9 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.ParseException;
-import com.parse.ParseUser;
-import com.parse.SignUpCallback;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.SignUpCallback;
 
 /**
  * Activity which displays a login screen to the user.
@@ -98,14 +98,15 @@ public class SignUpActivity extends Activity {
     dialog.show();
 
     // Set up a new Parse user
-    ParseUser user = new ParseUser();
+    AVUser user = new AVUser();
     user.setUsername(username);
     user.setPassword(password);
+    user.setMobilePhoneNumber("13911073881");
 
     // Call the Parse signup method
     user.signUpInBackground(new SignUpCallback() {
       @Override
-      public void done(ParseException e) {
+      public void done(AVException e) {
         dialog.dismiss();
         if (e != null) {
           // Show the error message

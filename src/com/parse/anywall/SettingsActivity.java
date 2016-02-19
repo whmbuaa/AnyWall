@@ -1,5 +1,8 @@
 package com.parse.anywall;
 
+import java.util.Collections;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,10 +13,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
-import com.parse.ParseUser;
-
-import java.util.Collections;
-import java.util.List;
+import com.avos.avoscloud.AVUser;
 
 /**
  * Activity that displays the settings screen.
@@ -62,7 +62,7 @@ public class SettingsActivity extends Activity {
     logoutButton.setOnClickListener(new OnClickListener() {
       public void onClick(View v) {
         // Call the Parse log out method
-        ParseUser.logOut();
+        AVUser.logOut();
         // Start and intent for the dispatch activity
         Intent intent = new Intent(SettingsActivity.this, DispatchActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
