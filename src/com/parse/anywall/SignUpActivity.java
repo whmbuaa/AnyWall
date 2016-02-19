@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.RequestMobileCodeCallback;
 import com.avos.avoscloud.SignUpCallback;
 
 /**
@@ -24,6 +26,12 @@ public class SignUpActivity extends Activity {
   private EditText usernameEditText;
   private EditText passwordEditText;
   private EditText passwordAgainEditText;
+  
+
+  private EditText mEtMobileNumber;
+  private EditText mEtSms;
+
+  
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +44,10 @@ public class SignUpActivity extends Activity {
 
     passwordEditText = (EditText) findViewById(R.id.password_edit_text);
     passwordAgainEditText = (EditText) findViewById(R.id.password_again_edit_text);
+    
+    mEtMobileNumber = (EditText) findViewById(R.id.et_mobile_number);
+    mEtSms = (EditText) findViewById(R.id.et_sms);
+    
     passwordAgainEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
       @Override
       public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -55,9 +67,60 @@ public class SignUpActivity extends Activity {
         signup();
       }
     });
+    
+    findViewById(R.id.bt_send_sms).setOnClickListener(new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			  AVUser.requestMobilePhoneVerifyInBackground(mEtMobileNumber.getText().toString(),new RequestMobileCodeCallback() {
+			
+				      @Override
+				      public void done(AVException e) {
+				          //发送了验证码以后做点什么呢
+				        if (e != null) {
+				          // Show the error message
+				          Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+				        }
+				      }
+				    });
+		}
+	});
+    
+    findViewById(R.id.bt_verify_sms).setOnClickListener(new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			  AVUser.requestMobilePhoneVerifyInBackground(mEtSms.getText().toString(),new RequestMobileCodeCallback() {
+			
+				      @Override
+				      public void done(AVException e) {
+				          //发送了验证码以后做点什么呢
+				        if (e != null) {
+				          // Show the error message
+				          Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+				        }
+				        else{
+				        	switchToSignup();
+				        }
+				      }
+					
+				    });
+		}
+	});
+    
   }
+  
+  private void switchToSignup() {
+		// TODO Auto-generated method stub
+		findViewById(R.id.sms_verification_contaier).setVisibility(View.GONE);
+		findViewById(R.id.signup_container).setVisibility(View.VISIBLE);
+	}
 
   private void signup() {
+	  
+	  
     String username = usernameEditText.getText().toString().trim();
     String password = passwordEditText.getText().toString().trim();
     String passwordAgain = passwordAgainEditText.getText().toString().trim();
@@ -101,7 +164,7 @@ public class SignUpActivity extends Activity {
     AVUser user = new AVUser();
     user.setUsername(username);
     user.setPassword(password);
-    user.setMobilePhoneNumber("13911073881");
+    user.setMobilePhoneNumber(mEtMobileNumber.getText().toString());
 
     // Call the Parse signup method
     user.signUpInBackground(new SignUpCallback() {
@@ -119,5 +182,8 @@ public class SignUpActivity extends Activity {
         }
       }
     });
+	  
+	  
+	  
   }
 }

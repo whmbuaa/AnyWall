@@ -8,50 +8,84 @@
         android:id="@+id/signup_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-
-        <LinearLayout
-            style="@style/LoginFormContainer"
-            android:orientation="vertical" >
-
-            <EditText
-                android:id="@+id/username_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/prompt_username"
-                android:inputType="textEmailAddress"
-                android:maxLines="1"
-                android:singleLine="true" />
-
-            <EditText
-                android:id="@+id/password_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/prompt_password"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:singleLine="true" />
-            
-            <EditText
-                android:id="@+id/password_again_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/prompt_password_again"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:imeActionId="@+id/edittext_action_signup"
-                android:imeActionLabel="@string/signup"
-                android:imeOptions="actionUnspecified" />
-
-            <Button
-                android:id="@+id/action_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="16dp"
-                android:paddingLeft="32dp"
-                android:paddingRight="32dp"
-                android:text="@string/signup" />
+		 <LinearLayout
+		     android:layout_width="match_parent"
+		     android:layout_height="wrap_content"
+		     android:orientation="vertical">
+				<TableLayout 
+				    android:id="@+id/sms_verification_contaier"
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:stretchColumns="0">
+					<TableRow>
+					     <EditText
+			                android:id="@+id/et_mobile_number"
+			                android:hint="手机号码"
+			                android:inputType="textEmailAddress"
+			                android:maxLines="1"
+			                android:singleLine="true" />
+					      <Button 
+					          android:id="@+id/bt_send_sms"
+					          android:text="发送验证码"/>
+					</TableRow>"
+				    <TableRow >
+				        <EditText
+			                android:id="@+id/et_sms"
+			                android:hint="手机号码"
+			                android:inputType="textEmailAddress"
+			                android:maxLines="1"
+			                android:singleLine="true" />
+					      <Button 
+					          android:id="@+id/bt_verify_sms"
+					          android:text="验证手机"/>
+				    </TableRow>
+				</TableLayout>      
+		        <LinearLayout
+		            android:id="@+id/signup_container"
+		            style="@style/LoginFormContainer"
+		            android:orientation="vertical"
+		            android:visibility="gone" >
+		
+		            <EditText
+		                android:id="@+id/username_edit_text"
+		                android:layout_width="match_parent"
+		                android:layout_height="wrap_content"
+		                android:hint="@string/prompt_username"
+		                android:inputType="textEmailAddress"
+		                android:maxLines="1"
+		                android:singleLine="true" />
+		
+		            <EditText
+		                android:id="@+id/password_edit_text"
+		                android:layout_width="match_parent"
+		                android:layout_height="wrap_content"
+		                android:hint="@string/prompt_password"
+		                android:inputType="textPassword"
+		                android:maxLines="1"
+		                android:singleLine="true" />
+		            
+		            <EditText
+		                android:id="@+id/password_again_edit_text"
+		                android:layout_width="match_parent"
+		                android:layout_height="wrap_content"
+		                android:hint="@string/prompt_password_again"
+		                android:inputType="textPassword"
+		                android:maxLines="1"
+		                android:singleLine="true"
+		                android:imeActionId="@+id/edittext_action_signup"
+		                android:imeActionLabel="@string/signup"
+		                android:imeOptions="actionUnspecified" />
+		
+		            <Button
+		                android:id="@+id/action_button"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_gravity="end"
+		                android:layout_marginTop="16dp"
+		                android:paddingLeft="32dp"
+		                android:paddingRight="32dp"
+		                android:text="@string/signup" />
+		        </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
